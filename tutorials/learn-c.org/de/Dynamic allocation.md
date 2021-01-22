@@ -49,7 +49,7 @@ Tutorial Code
     } point;
 
     int main() {
-      point * mypoint;
+      point * mypoint = NULL;
 
       /* Belege ein neues point Strukt hier,
          sodass mypoint darauf zeigt */
@@ -62,12 +62,12 @@ Tutorial Code
       return 0;
     }
 
-Erwartete Ausgabe
+Expected Output
 -----------------
 
     mypoint Koordinaten: 10, 5
 
-Lösung
+Solution
 ------
 
     #include <stdio.h>

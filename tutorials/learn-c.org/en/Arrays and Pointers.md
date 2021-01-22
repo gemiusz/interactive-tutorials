@@ -8,15 +8,15 @@ In a previous tutorial on [[Pointers]], you learned that a pointer to a given da
 
 Here, `c` is a scalar variable that can store only a single value. However, you are already familiar with arrays that can hold multiple values of the same data type in a contiguously allocated memory block. So, you might wonder, can we have pointers to arrays too? Indeed, we can.
 
-Let us start with an example code and look at its output. We would discuss its behavior subsequently.
+Let us start with an example code and look at its output. We will discuss its behavior subsequently.
 
     char vowels[] = {'A', 'E', 'I', 'O', 'U'};
-    char *pvowels = &vowels;
+    char *pvowels = vowels;
     int i;
 
     // Print the addresses
     for (i = 0; i < 5; i++) {
-        printf("&vowels[%d]: %u, pvowels + %d: %u, vowels + %d: %u\n", i, &vowels[i], i, pvowels + i, i, vowels + i);
+        printf("&vowels[%d]: %p, pvowels + %d: %p, vowels + %d: %p\n", i, &vowels[i], i, pvowels + i, i, vowels + i);
     }
 
     // Print the values
@@ -26,15 +26,15 @@ Let us start with an example code and look at its output. We would discuss its b
 
 A typical output of the above code is shown below.
 
->&vowels[0]: 4287605531, pvowels + 0: 4287605531, vowels + 0: 4287605531
+>&vowels[0]: 0x7ffee146da17, pvowels + 0: 0x7ffee146da17, vowels + 0: 0x7ffee146da17
 >
->&vowels[1]: 4287605532, pvowels + 1: 4287605532, vowels + 1: 4287605532
+>&vowels[1]: 0x7ffee146da18, pvowels + 1: 0x7ffee146da18, vowels + 1: 0x7ffee146da18
 >
->&vowels[2]: 4287605533, pvowels + 2: 4287605533, vowels + 2: 4287605533
+>&vowels[2]: 0x7ffee146da19, pvowels + 2: 0x7ffee146da19, vowels + 2: 0x7ffee146da19
 >
->&vowels[3]: 4287605534, pvowels + 3: 4287605534, vowels + 3: 4287605534
+>&vowels[3]: 0x7ffee146da1a, pvowels + 3: 0x7ffee146da1a, vowels + 3: 0x7ffee146da1a
 >
->&vowels[4]: 4287605535, pvowels + 4: 4287605535, vowels + 4: 4287605535
+>&vowels[4]: 0x7ffee146da1b, pvowels + 4: 0x7ffee146da1b, vowels + 4: 0x7ffee146da1b
 >
 >vowels[0]: A, \*(pvowels + 0): A, *(vowels + 0): A
 >
@@ -48,13 +48,11 @@ A typical output of the above code is shown below.
 
 
 
-As you rightly guessed, `&vowels[i]` gives the memory location of the *i*th element of the array `vowels`. Moreover, since this is a character array, each element occupies one byte so that the consecutive memory addresses are separated by a single byte. We also considered a pointer, `pvowels`, and assigned the address of the array `vowels` to it. `pvowels + i` is a valid operation; although in general, this may not always be meaningful (explored further in [[Pointer Arithmetics]] ). In particular, the output shown above indicates that `&vowels[i]` and `pvowels + i` are equivalent. You are suggested to alter the data types of the array and pointer variables and convince yourself the this claim is indeed true.
+As you rightly guessed, `&vowels[i]` gives the memory location of the *i*th element of the array `vowels`. Moreover, since this is a character array, each element occupies one byte so that the consecutive memory addresses are separated by a single byte. We also created a pointer, `pvowels`, and assigned the address of the array `vowels` to it. `pvowels + i` is a valid operation; although in general, this may not always be meaningful (explored further in [[Pointer Arithmetics]] ). In particular, the output shown above indicates that `&vowels[i]` and `pvowels + i` are equivalent. Feel free to alter the data types of the array and pointer variables to test this out.
 
-If you look carefully at the previous code, you would notice that we also used another apparently surprising notation, `vowels + i`. Moreover, `pvowels + i` and `vowels + i` returns the same thing &mdash; address of the *i*th element of the array `vowels`. On the other hand, `*(pvowels + i)` and `*(vowels + i)` both return the *i*th element of the array `vowels`. Why is that so?
+If you look carefully at the previous code, you will notice that we also used another apparently surprising notation: `vowels + i`. Moreover, `pvowels + i` and `vowels + i` returns the same thing &mdash; address of the *i*th element of the array `vowels`. On the other hand, `*(pvowels + i)` and `*(vowels + i)` both return the *i*th element of the array `vowels`. Why is that so?
 
 This is because the name of an array itself is a (constant) pointer to the first element of the array. In other words, the notations `vowels`, `&vowels[0]`, and `vowels + 0` all point to the same location.
-
-You may go through [Pointers and Arrays](https://www.le.ac.uk/users/rjm1/cotter/page_59.htm) for a further detailed discussion on this topic.
 
 
 Dynamic Memory Allocation for Arrays
@@ -81,9 +79,9 @@ By now we know that we can traverse an array using pointers. Moreover, we also k
 
     free(pvowels);
 
-In the above code, we allocated five contiguous bytes of memory to store five characters. Subsequently, we used array notations to traverse the blocks of memory as if `pvowels` is an array. However, remember that `pvowels` actually is a pointer, and as noted in [Pointers and Arrays](https://www.le.ac.uk/users/rjm1/cotter/page_59.htm), pointers and arrays, in general, are not the same thing.
+In the above code, we allocated five contiguous bytes of memory to store five characters. Subsequently, we used array notations to traverse the blocks of memory as if `pvowels` is an array. However, remember that `pvowels` actually is a pointer. Pointers and arrays, in general, are not the same thing.
 
-So when is this useful? Remember that while declaring an array, the number of elements that it would contain must be known beforehand. Therefore, in some scenarios it might happen that the space allocated for an array is either too less than the desired space or too much more. However, by using dynamic memory allocation, one can allocate just as much memory as required by a program. Moreover, unused memory can be freed as soon as it is no longer required by invoking the `free()` function. On the down side, with dynamic memory allocation, one must responsibly call `free()` wherever relevant. Otherwise, memory leaks would occur.
+So when is this useful? Remember that while declaring an array, the number of elements that it would contain must be known beforehand. Therefore, in some scenarios it might happen that the space allocated for an array is either less than the desired space or more. However, by using dynamic memory allocation, one can allocate just as much memory as required by a program. Moreover, unused memory can be freed as soon as it is no longer required by invoking the `free()` function. On the down side, with dynamic memory allocation, one must responsibly call `free()` wherever relevant. Otherwise, memory leaks would occur.
 
 We conclude this tutorial by looking at dynamic memory allocation for a two-dimensional array. This can be generalized to *n*-dimensions in a similar way. Unlike one-dimensional arrays, where we used a pointer, in this case we require a pointer to a pointer, as shown below.
 

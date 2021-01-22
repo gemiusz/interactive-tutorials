@@ -3,8 +3,7 @@ Tutorial
 
 ### Defining strings
 
-Strings in C are actually arrays of characters. Although pointers in C is in advanced subject explained later on, we will use pointers to
-a character array to define simple strings, in the following manner:
+Strings in C are actually arrays of characters. Although using pointers in C is an advanced subject, fully explained later on, we will use pointers to a character array to define simple strings, in the following manner:
 
     char * name = "John Smith";
 
@@ -21,7 +20,7 @@ the length of the string:
     /* is the same as */
     char name[11] = "John Smith";
 
-The reason that we need to add one, although the string `John Smith` is exactly 10 characters long, is for the string termination,
+The reason that we need to add one, although the string `John Smith` is exactly 10 characters long, is for the string termination:
 a special character (equal to 0) which indicates the end of the string. The end of the string is marked because the program
 does not know the length of the string - only the compiler knows it according to the code.
 
@@ -60,8 +59,8 @@ called `strcmp`, but it is not recommended to use it. For example:
 
 ### String Concatenation
 
-The function 'strncat' appends first n characters of src string string to the destination string where n is min(n,length(src));
-The arguments passed are destination string, source string, and n - maximum number of characters to be appended.For Example:
+The function 'strncat' appends first n characters of src string to the destination string where n is min(n,length(src));
+The arguments passed are destination string, source string, and n - maximum number of characters to be appended. For Example:
 
     char dest[20]="Hello";
     char src[20]="World";
@@ -111,7 +110,7 @@ Solution
     #include <stdio.h>
     #include <string.h>
     int main() {
-      char first_name[] = "John";
+      char * first_name = "John";
       char last_name[] = "Doe";
       char name[100];
 

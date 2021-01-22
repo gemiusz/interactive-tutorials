@@ -106,7 +106,7 @@ function compareHTML(a, b) {
 }
 
 function execute() {
-	toggleMinimize(true);
+	maximizeDock();
 
 	if (window.domainData.language == "html") {
 		$("#html-output").show();
@@ -148,7 +148,8 @@ function execute() {
 			print(err.message);
 		}
 	} else {
-		loading.show();
+		//loading.show();
+		print("Executing, please wait...");
 		$.ajax({
 			type : "post",
 			data : JSON.stringify({
@@ -165,7 +166,7 @@ function execute() {
 }
 
 function execDone(data) {
-	loading.hide();
+	//loading.hide();
 	//$('#output').css('background-color', 'white');
 	if (data["output"] == "exception") {
 		//$('#output').css('color', 'red');
@@ -207,185 +208,52 @@ function print(text) {
 function load() {
 	loading = $("#loading");
 	var codeBlocks = $("code");
-	// TODO: make syntax highlighting generic by matching language codes with prism codes
+	var outputTheme = "xq-light";
+	var mode;
 
-	switch (window.domainData.language) {
-		case "python":
-			editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-				mode: {name: "python",
-					version: 2,
-					singleLineStringErrors: false},
-				lineNumbers: true,
-				indentUnit: 4,
-				tabMode: "shift",
-				theme: "monokai"
-			});
+    if (document.getElementById("code")) {
+    	if (window.domainData.language === "python") {
+    		mode = {
+    			name: "python",
+			 	version: 2,
+			 	singleLineStringErrors: false
+    		}
+		} else {
+    		mode = window.domainData.codemirror_mode
+		}
 
-			codeBlocks.addClass("language-python");
-			Prism.highlightAll();
+        editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+            lineNumbers: true,
+            indentUnit: 4,
+            tabMode: "shift",
+            mode: mode,
+            theme: "xq-light"
+        });
 
-			break;
-		case "java":
-			editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-				lineNumbers: true,
-				indentUnit: 4,
-				tabMode: "shift",
-				mode: "text/x-java",
-				theme: "monokai"
-			});
-
-			codeBlocks.addClass("language-java");
-			Prism.highlightAll();
-
-			break;
-		case "c":
-			editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-				lineNumbers: true,
-				indentUnit: 4,
-				tabMode: "shift",
-				mode: "text/x-csrc",
-				theme: "monokai"
-			});
-
-			codeBlocks.addClass("language-c");
-			Prism.highlightAll();
-
-			break;
-		case "c++11":
-			editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-				lineNumbers: true,
-				indentUnit: 4,
-				tabMode: "shift",
-				mode: "text/x-csrc",
-				theme: "monokai"
-			});
-
-			codeBlocks.addClass("language-cpp");
-			Prism.highlightAll();
-
-			break;
-		case "javascript":
-			editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-				lineNumbers: true,
-				indentUnit: 4,
-				tabMode: "shift",
-				mode: "text/javascript",
-				theme: "monokai"
-			});
-
-			codeBlocks.addClass("language-javascript");
-			Prism.highlightAll();
-
-			break;
-		case "ruby":
-			editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-				lineNumbers: true,
-				indentUnit: 4,
-				tabMode: "shift",
-				mode: "text/x-ruby",
-				theme: "monokai"
-			});
-
-			codeBlocks.addClass("language-ruby");
-			Prism.highlightAll();
-
-			break;
-		case "bash":
-			editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-				lineNumbers: true,
-				indentUnit: 4,
-				tabMode: "shift",
-				mode: "text/x-sh",
-				theme: "monokai"
-			});
-
-			codeBlocks.addClass("language-bash");
-			Prism.highlightAll();
-
-			break;
-		case "perl":
-			editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-				lineNumbers: true,
-				indentUnit: 4,
-				tabMode: "shift",
-				mode: "text/x-perl",
-				theme: "monokai"
-			});
-
-			codeBlocks.addClass("language-perl");
-			Prism.highlightAll();
-
-			break;
-
-		case "php":
-			editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-				lineNumbers: true,
-				indentUnit: 4,
-				tabMode: "shift",
-				mode: "application/x-httpd-php",
-				theme: "monokai"
-			});
-
-			codeBlocks.addClass("language-php");
-			Prism.highlightAll();
-
-			break;
-
-		case "c#":
-			editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-				lineNumbers: true,
-				indentUnit: 4,
-				tabMode: "shift",
-				mode: "text/x-csharp",
-				theme: "monokai"
-			});
-
-			codeBlocks.addClass("language-csharp");
-			Prism.highlightAll();
-
-			break;
-
-		case "html":
-			editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-				lineNumbers: true,
-				indentUnit: 4,
-				tabMode: "shift",
-				mode: "text/html",
-				theme: "monokai"
-			});
-
-			codeBlocks.addClass("language-html");
-			Prism.highlightAll();
-
-			break;
-		case "go":
-			editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-				lineNumbers: true,
-				indentUnit: 4,
-				tabMode: "shift",
-				mode: "text/x-go",
-				theme: "monokai"
-			});
-
-			codeBlocks.addClass("language-go");
-			Prism.highlightAll();
-
-			break;
-
+        codeBlocks.addClass(window.domainData.prism_mode);
+        Prism.highlightAll();
+    } else {
+		editor = {
+			"getValue": function() {},
+			"setValue": function(x) {}
+		};
 	}
 
-	output = CodeMirror.fromTextArea(document.getElementById("output"), {
-		lineNumbers: false,
-		textWrapping: true,
-		readOnly : true,
-		theme: "monokai",
-        mode: "text/plain"
-	});
+	if (document.getElementById("output")) {
+		output = CodeMirror.fromTextArea(document.getElementById("output"), {
+			lineNumbers: false,
+			textWrapping: true,
+			readOnly : true,
+			theme: outputTheme,
+			mode: "text/plain"
+		});
+	}
 
     originalCode = editor.getValue();
 
-    $("#inner-text pre").after(
-        $("<a>").addClass("btn btn-small btn-success execute-code").text("Execute Code").click(function() {
+    $("#inner-text pre.exec").after(
+        $("<button>").addClass("btn btn-sm btn-primary execute-code").text("Execute Code").click(function() {
+        	maximizeDock();
             var text = $(this).prev().text();
             if (window.domainData.container_word && text.indexOf(window.domainData.container_word) == -1) {
                 var lines = text.split("\n");
@@ -396,7 +264,6 @@ function load() {
                 text = window.domainData.container.replace("{code}", indentedText);
 
             }
-			toggleMinimize(true);
             editor.setValue(text);
 			execute();
         })
@@ -405,12 +272,12 @@ function load() {
 }
 
 function showExpected() {
-	toggleMinimize(true);
+	maximizeDock();
 	output.setValue(tutorialData.output);
 }
 
 function showSolution() {
-	toggleMinimize(true);
+	maximizeDock();
     var solutionText = tutorialData.solution;
     if (solutionText) {
     	editor.setValue(solutionText);
@@ -421,30 +288,41 @@ function showSolution() {
 }
 
 function reset() {
-	toggleMinimize(true);
+	maximizeDock();
     $("#run-button").prop("disabled", false);
 	editor.setValue(originalCode);
 }
 
-function toggleMinimize(maximizeOnly) {
-	if (maximizeOnly && !minimized) return;
-	if (minimized) {
-		$(".footer-toggle").show();
-		editor.setValue(originalCode);
-		$("#minimize-button").text("Minimize Window").removeClass("btn-success");
-	} else {
-		$(".footer-toggle").hide();
-		$("#minimize-button").text("Show Window").addClass("btn-success");
-	}
+function toggleMinimize() {
+	var dock = document.querySelector("footer#dock");
 
-	minimized = !minimized;
-	if (minimized) {
-		$("footer").addClass("minimized");
-		$("footer").removeClass("maximized");
+	if (dock.classList.contains("maximized")) {
+		minimizeDock();
 	} else {
-		$("footer").addClass("maximized");
-		$("footer").removeClass("minimized");
+		maximizeDock();
 	}
+}
+
+function maximizeDock() {
+	var dock = document.querySelector("footer#dock");
+	var toggleButton = document.querySelector("#toggle-dock-button");
+	// $("#run-button").prop("disabled", false);
+
+	dock.classList.add("maximized");
+	toggleButton.classList.remove("btn-primary");
+	toggleButton.classList.add("btn-success");
+
+}
+
+
+function minimizeDock() {
+	var dock = document.querySelector("footer#dock");
+	var toggleButton = document.querySelector("#toggle-dock-button");
+	// $("#run-button").prop("disabled", true);
+
+	dock.classList.remove("maximized");
+	toggleButton.classList.remove("btn-success");
+	toggleButton.classList.add("btn-primary");
 
 }
 

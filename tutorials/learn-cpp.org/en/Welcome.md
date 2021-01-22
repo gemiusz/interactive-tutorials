@@ -8,15 +8,13 @@ There is no need to download anything - Just click on the chapter you wish to be
 
 learn-cpp.org is still under construction - If you wish to contribute tutorials, please click on `Contributing Tutorials` down below.
 
-Table of Contents
------------------
-
 ### Learn the Basics
 
 - [[Hello, World!]]
 - [[Variables and Types]]
 - [[Arrays]]
 - [[Strings]]
+- [[if-else]]
 - [[For loops]]
 - [[While loops]]
 - [[Functions]]
@@ -30,6 +28,7 @@ Table of Contents
 - [[Linked lists]]
 - [[Binary trees]]
 - [[Function Pointers]]
+- [[Template Metaprogramming]]
 
 ### Integrated and Spiral Learning
 

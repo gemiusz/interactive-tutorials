@@ -4,7 +4,7 @@ Tutorial
 ### Strings definieren
 
 Strings in C sind eigentlich Arrays von Zeichen. Obwohl Zeiger in C ein fortgeschrittenes Thema ist, dass später behandelt wird, werden wir Zeiger 
-für unseren Zeichenarray benutzen. Und wzar folgendermaßen:
+für unseren Zeichenarray benutzen. Und zwar folgendermaßen:
 
     char * name = "John Smith";
 
@@ -81,12 +81,12 @@ Tutorial Code
     }
 
 
-Erwartete Ausgabe
+Expected Output
 -----------------
 
     Erledigt!
 
-Lösung
+Solution
 ------
 
     int main() {

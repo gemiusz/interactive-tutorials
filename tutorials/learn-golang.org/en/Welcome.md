@@ -8,12 +8,12 @@ Just click on the chapter you wish to begin from, and follow the instructions. G
 
 learn-golang.org is still under construction - If you wish to contribute tutorials, please click on `Contributing Tutorials` down below.
 
-Table of Contents
------------------
-
 ### Learn the Basics
 
 - [[Hello, World!]]
+- [[Variables]]
+- [[Arrays]]
+- [[Loops]]
 
 ### Contributing Tutorials
 

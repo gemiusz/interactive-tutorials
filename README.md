@@ -14,17 +14,43 @@ This is the open source repository for the free interactive tutorial websites:
 * [learncs.org](https://www.learncs.org)
 * [learn-perl.org](https://www.learn-perl.org)
 * [learnrubyonline.org](https://www.learnrubyonline.org)
+* [learn-golang.org](https://www.learn-golang.org)
+* [learnRust.org](https://learnRust.org)
 
 Please feel free to contribute your tutorials or exercises by sending a pull request and adding yourself on the list.
 
-Developers will require the programming language Python https://www.python.org/ and the web framework Flask http://flask.pocoo.org/ installed in order to use this repository.
+To run locally, execute:
+
+    make build
+    make run   
+
+By default, the server process will run at http://localhost:5000.
+
+Make build will build a Dockerfile and make run will default to run with `learnpython.org`.
 
 The web server will locally compile and load all Markdown files into memory. The development version of the web server
 requires that you specify the domain you are working on, e.g.:
 
+The docker needs to be rebuilt upon any change in the Python code or the Markdown code.
+
+To run the development server outside of a Docker, create a Python 2 virtualenv and install the requirements.
+
+    # create the virtualenv
+    mkvirtualenv interactive-tutorials
+    
+    # install requirements
+    pip install -r requirements.txt
+    
+    # run the development server
     python main.py -d learnpython.org
     
-By default, the server process will run at http://localhost:5000
+
+Todos
+=====
+
+* Dark mode
+* Fix mobile
+
 
 Contributors
 ============
@@ -33,3 +59,5 @@ superreg
 JBoy Advance
 
 qwong95
+
+AddaxSoft
